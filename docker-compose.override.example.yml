@@ -1,0 +1,14 @@
+version: '2'
+services:
+  cms:
+    environment:
+      LICENSEKEY: TH1S-15N0-T4V4-L1DK-3YKT-HXBY-D34D-B33F
+  elastic:
+    build: ./elastic
+    ports:
+      - '9200:9200'
+      - '9300:9300'
+  languagetool:
+    image: gentics/languagetool
+    ports:
+      - '8010:8010'

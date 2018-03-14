@@ -1,0 +1,36 @@
+version: '2'
+services:
+  cms:
+    image: gentics/cms:5.30.0
+    restart: always
+    ports:
+      - '80:80'
+    restart: always
+    volumes:
+      - ./cms/dbfiles:/Node/node/content/dbfiles
+      - ./cms/bundles:/Node/node/system/bundles
+      - ./cms/conf.d:/Node/etc/conf.d
+      - ./cms/packages:/Node/node/content/packages
+    environment:
+      NODE_USER_PASSWORD: "node"
+      NODE_DB_USER: root
+      NODE_DB_PASSWORD: ""
+      NODE_DB_HOST: db
+  db:
+    image: mysql:5.7
+    command: --sql-mode=""
+    volumes:
+      - ./db/sql:/docker-entrypoint-initdb.d
+      - ./db/conf.d:/etc/mysql/conf.d
+    environment:
+      MYSQL_ALLOW_EMPTY_PASSWORD: "true"
+      MYSQL_ROOT_PASSWORD: ""
+  elastic:
+    build: ./elastic
+    ports:
+      - '127.0.0.1:9200:9200'
+      - '127.0.0.1:9300:9300'
+  spellchecker:
+    image: gentics/languagetool
+    ports:
+      - '8010:8010'
