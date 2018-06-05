@@ -5,7 +5,7 @@ This repository contains an example docker compose stack for the [Gentics Enterp
 The stack contains the following components:
 
 * Gentics CMS   - CMS
-* MySQL 5.7     - Database
+* MariaDB 10.3  - Database
 * Elasticsearch - Search server
 * Languagetool  - Spellchecker server
 
@@ -31,7 +31,7 @@ During startup the initial MySQL Database will be imported. This initial setup c
 docker-compose up -d
 ```
 
-After the setup you can access the UI via http://localhost/.Node/ui and login using `node/node`.
+After the setup you can access the UI via http://localhost:8080/.Node/ui and login using `node/node`.
 
 ## Security
 

@@ -1,10 +1,7 @@
-version: '2'
+version: '2.1'
 services:
   cms:
-    image: gentics/cms:5.30.0
-    restart: always
-    ports:
-      - '80:80'
+    image: gentics/cms:5.31.2
     restart: always
     volumes:
       - ./cms/dbfiles:/Node/node/content/dbfiles
@@ -16,21 +13,20 @@ services:
       NODE_DB_USER: root
       NODE_DB_PASSWORD: ""
       NODE_DB_HOST: db
+    depends_on:
+      db:
+        condition: service_started
   db:
-    image: mysql:5.7
+    image: mariadb:10.3
     command: --sql-mode=""
     volumes:
-      - ./db/sql:/docker-entrypoint-initdb.d
+      - ./db/docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d
       - ./db/conf.d:/etc/mysql/conf.d
+      - ./db/data:/var/lib/mysql
     environment:
       MYSQL_ALLOW_EMPTY_PASSWORD: "true"
       MYSQL_ROOT_PASSWORD: ""
   elastic:
     build: ./elastic
-    ports:
-      - '127.0.0.1:9200:9200'
-      - '127.0.0.1:9300:9300'
-  spellchecker:
+  languagetool:
     image: gentics/languagetool
-    ports:
-      - '8010:8010'
