@@ -33,6 +33,10 @@ docker-compose up -d
 
 After the setup you can access the UI via http://localhost:8080/.Node/ui and login using `node/node`.
 
+## Common problems & FAQ
+
+See: https://github.com/gentics/cms-compose/wiki/Common-problems-&-FAQ
+
 ## Security
 
 You can either set a custom password afterwards or omit the `NODE_USER_PASSWORD` environment variable. Omitting the variable will cause Gentics CMS to generate a random password for you.
