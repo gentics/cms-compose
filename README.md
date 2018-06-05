@@ -11,7 +11,12 @@ The stack contains the following components:
 
 ## Usage
 
-1. Create a docker-compose.override.yml file which contains your license key.
+1. Permission on gentics/cms:5.31.2
+
+Make sure you have the permission to access the Docker hub repository [gentics/cms](https://hub.docker.com/r/gentics/cms/).
+Use `docker login` to login with your client to Docker hub.
+
+2. Create a docker-compose.override.yml file which contains your license key.
 
 See `docker-compose.overide.example.yml` for a more detailed example.
 
@@ -23,7 +28,7 @@ services:
       LICENSEKEY: AAAA-BBBB-CCCC-DDDD-EEEE-FFFF-GGGG-HHHH
 ```
 
-2. Run the stack
+3. Run the stack
 
 During startup the initial MySQL Database will be imported. This initial setup can take a few seconds.
 
@@ -32,6 +37,10 @@ docker-compose up -d
 ```
 
 After the setup you can access the UI via http://localhost:8080/.Node/ui and login using `node/node`.
+
+## CMS image configuration
+
+See: https://hub.docker.com/r/gentics/cms/
 
 ## Common problems & FAQ
 
