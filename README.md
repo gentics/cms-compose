@@ -2,7 +2,8 @@
 
 This repository contains an example docker compose stack for the [Gentics CMS](https://www.gentics.com/genticscms/software_contentmanagement.en.html)
 
-Introduction & License
+## Introduction & License
+
 Gentics CMS is an integrated solution for online presences. It allows you to create and publish content, organise editorial workflows, and manage a variety of publications. Interfaces such as newsletter and social media integration, special solutions for multimedia storytelling and web analysis cover important functions in online marketing.
 
 Gentics CMS is commercial standard software. Before using it, you have to send a request for a Gentics CMS License Key. This request has to be sent by email to support@gentics.com.
