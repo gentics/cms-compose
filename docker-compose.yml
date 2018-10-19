@@ -1,13 +1,14 @@
 version: '2.1'
 services:
   cms:
-    image: gentics/cms:5.31.2
+    image: gentics/cms:5.31
     restart: always
     volumes:
-      - ./cms/dbfiles:/Node/node/content/dbfiles
-      - ./cms/bundles:/Node/node/system/bundles
-      - ./cms/conf.d:/Node/etc/conf.d
-      - ./cms/packages:/Node/node/content/packages
+      - cms-node:/Node/node
+      - cms-dbfiles:/Node/node/content/dbfiles
+      - cms-bundles:/Node/node/system/bundles
+      - ./cms/conf.d:/Node/etc/conf.d:ro
+      - ./cms/packages:/Node/node/content/packages:cached
     environment:
       NODE_USER_PASSWORD: "node"
       NODE_DB_USER: root
@@ -20,13 +21,30 @@ services:
     image: mariadb:10.3
     command: mysqld --innodb-flush-method=fsync --sql-mode=""
     volumes:
-      - ./db/docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d
-      - ./db/conf.d:/etc/mysql/conf.d
-      - ./db/data:/var/lib/mysql
+      - ./db/docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d:ro
+      - ./db/conf.d:/etc/mysql/conf.d:ro
+      - db-data:/var/lib/mysql
     environment:
       MYSQL_ALLOW_EMPTY_PASSWORD: "true"
       MYSQL_ROOT_PASSWORD: ""
   elastic:
     build: ./elastic
+    environment:
+      - bootstrap.memory_lock=true
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
   languagetool:
     image: gentics/languagetool
+
+volumes:
+  cms-node:
+    driver: local
+  cms-dbfiles:
+    driver: local
+  cms-bundles:
+    driver: local
+  db-data:
+    driver: local
