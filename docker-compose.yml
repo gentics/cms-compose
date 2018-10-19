@@ -7,7 +7,7 @@ services:
       - cms-node:/Node/node
       - cms-dbfiles:/Node/node/content/dbfiles
       - cms-bundles:/Node/node/system/bundles
-      - ./cms/conf.d:/Node/etc/conf.d:ro
+      - ./cms/conf.d:/Node/etc/conf.d
       - ./cms/packages:/Node/node/content/packages:cached
     environment:
       NODE_USER_PASSWORD: "node"
