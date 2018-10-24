@@ -38,6 +38,18 @@ services:
         hard: -1
   languagetool:
     image: gentics/languagetool
+  #tomcat:
+  #  image: tomcat:8.5
+  #  command: ["catalina.sh", "jpda", "run"]
+     # activiti.war is the output from building the Activiti webapp.
+     # See: https://www.gentics.com/Content.Node/guides/activiti_configuration.html
+     # If running acitiviti from another docker-compose file, get the IP of the CMS container using
+     # docker inspect ACTIVITI_CONTAINER and use the gateway address (=host)
+     # Do the same thing for the CMS container to get the host address there and be adle to configure
+     # the activiti IP.
+  #  volumes:
+  #    - ./activiti/activiti.war:/usr/local/tomcat/webapps/activiti.war
+  #    - ./activiti/gentics-activiti.properties:/Node/etc/gentics-activiti.properties
 
 volumes:
   cms-node:

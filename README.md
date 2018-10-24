@@ -18,6 +18,10 @@ The stack contains the following components:
 * Elasticsearch - Search server
 * Languagetool  - Spellchecker server
 
+Optional:
+
+* Tomcat        - For running the Activiti webapp for the CMS
+
 ## Usage
 
 1. Permission on gentics/cms:5.31.2
