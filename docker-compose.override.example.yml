@@ -10,3 +10,6 @@ services:
   languagetool:
     ports:
       - '8010:8010'
+  tomcat:
+    ports:
+      - '8888:8080'
