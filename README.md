@@ -24,10 +24,10 @@ Optional:
 
 ## Usage
 
-1. Permission on gentics/cms:5.31.2
+1. Permission on the CMS docker image
 
-Make sure you have the permission to access the Docker Hub repository [gentics/cms](https://hub.docker.com/r/gentics/cms/).
-Please let us know your Docker Hub user by sending an email to support@gentics.com. Use `docker login` to login with your client to Docker Hub.
+Make sure you have the permission to access the Gentics Docker registry at docker.apa-it.at.
+If you don't have a user yet, contact support@gentics.com. Use `docker login docker.apa-it.at` to login with your docker client to the Docker registry.
 
 2. Create a docker-compose.override.yml file which contains your license key.
 
