@@ -40,7 +40,7 @@ services:
       memlock:
         soft: -1
         hard: -1
-  languagetool:
+  spellchecker:
     image: gentics/languagetool
   #tomcat:
   #  image: tomcat:8.5
