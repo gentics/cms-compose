@@ -1,7 +1,7 @@
 version: '2.1'
 services:
   cms:
-    image: docker.apa-it.at/gentics/cms:5.31
+    image: docker.apa-it.at/gentics/cms:5.34.17
     restart: always
     volumes:
       - cms-node:/Node/node
