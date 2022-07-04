@@ -34,7 +34,7 @@ If you don't have a user yet, contact support@gentics.com. Use `docker login doc
 See `docker-compose.overide.example.yml` for a more detailed example.
 
 ```yml
-version: '2'
+version: "3"
 services:
   cms:
     environment:
@@ -46,10 +46,15 @@ services:
 During startup the initial MySQL Database will be imported. This initial setup can take a few seconds.
 
 ```
-docker-compose up -d
+docker compose up -d
 ```
 
-After the setup you can access Gentics CMS via http://localhost:8080/.Node/ui and login using `node/node`.
+After the setup you can access Gentics CMS via:
+- Editor User Interface: http://localhost:8080/editor
+- Administration User Interface: http://localhost:8080/admin
+- Old UI: http://localhost:8080/.Node/
+
+and login using `node/node`.
 
 ## CMS docker image configuration
 

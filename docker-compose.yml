@@ -1,8 +1,8 @@
-version: '2.1'
+version: "3"
 services:
   cms:
-    image: docker.apa-it.at/gentics/cms:5.36.0
-    restart: always
+    image: docker.apa-it.at/gentics/cms:5.44.0
+    restart: on-failure
     volumes:
       - cms-node:/Node/node
       - cms-dbfiles:/Node/node/content/dbfiles
@@ -10,6 +10,8 @@ services:
       - ./cms/conf.d:/Node/etc/conf.d
       - ./cms/packages:/Node/node/content/packages:cached
     environment:
+      JAVA_XMS: 512m
+      JAVA_XMX: 512m
       NODE_USER_PASSWORD: "node"
       NODE_DB_USER: root
       NODE_DB_PASSWORD: ""
@@ -18,7 +20,7 @@ services:
       db:
         condition: service_started
   db:
-    image: mariadb:10.3
+    image: docker.apa-it.at/mariadb:10.3
     command: mysqld --innodb-flush-method=fsync --sql-mode=""
     volumes:
       - ./db/docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d:ro
@@ -27,33 +29,65 @@ services:
     environment:
       MYSQL_ALLOW_EMPTY_PASSWORD: "true"
       MYSQL_ROOT_PASSWORD: ""
-  elastic:
-    image: docker.apa-it.at/elasticsearch/elasticsearch-oss:6.8.1
+
+  # https://www.elastic.co/guide/en/elasticsearch/reference/current/docker.html
+  elasticsearch:
+    image: docker.apa-it.at/elasticsearch/elasticsearch-oss:6.8.23
     command: >
       bash -c "[ ! -d /usr/share/elasticsearch/plugins/ingest-attachment ] \
-        && bin/elasticsearch-plugin install -b ingest-attachment
-      /usr/local/bin/docker-entrypoint.sh eswrapper"
+      && bin/elasticsearch-plugin install -b ingest-attachment \
+      && /usr/local/bin/docker-entrypoint.sh eswrapper"
     environment:
+      - "ES_JAVA_OPTS=-Xms256m -Xmx256m"
+      - discovery.type=single-node
       - bootstrap.memory_lock=true
-      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
     ulimits:
+      nofile:
+        soft: 65536
+        hard: 65536
       memlock:
         soft: -1
         hard: -1
-  spellchecker:
-    image: gentics/languagetool
-  #tomcat:
-  #  image: tomcat:8.5
-  #  command: ["catalina.sh", "jpda", "run"]
-     # activiti.war is the output from building the Activiti webapp.
-     # See: https://www.gentics.com/Content.Node/guides/activiti_configuration.html
-     # If running acitiviti from another docker-compose file, get the IP of the CMS container using
-     # docker inspect ACTIVITI_CONTAINER and use the gateway address (=host)
-     # Do the same thing for the CMS container to get the host address there and be adle to configure
-     # the activiti IP.
-  #  volumes:
-  #    - ./activiti/activiti.war:/usr/local/tomcat/webapps/activiti.war
-  #    - ./activiti/gentics-activiti.properties:/Node/etc/gentics-activiti.properties
+
+  languagetool:
+    image: docker.apa-it.at/gentics/languagetool
+    environment:
+      JAVA_TOOL_OPTIONS: "-Xms128m -Xmx128m"
+
+  # https://hub.docker.com/r/gentics/mesh/
+  # mesh:
+  #   # https://getmesh.io/docs/administration-guide.html#_environment_variables
+  #   image: docker.apa-it.at/gentics/mesh:1.8.5
+  #   volumes:
+  #     - mesh-data:/mesh/data
+  #     - mesh-config:/config
+  #     - ./mesh/plugins/:/plugins/
+  #   ulimits:
+  #     nofile:
+  #       soft: 262144
+  #       hard: 262144
+  #   environment:
+  #     JAVA_TOOL_OPTIONS: "-Xms384m -Xmx384m -XX:MaxDirectMemorySize=128m -Dstorage.diskCache.bufferSize=128"
+  #     MESH_BINARY_DIR: "/mesh/data/uploads"
+  #     MESH_GRAPH_DB_DIRECTORY: "/mesh/data/graphdb"
+  #     MESH_AUTH_KEYSTORE_PATH: "/config/keystore.jceks"
+  #     MESH_GRAPH_BACKUP_DIRECTORY: "/mesh/data/backups"
+  #     MESH_ELASTICSEARCH_URL: "http://elasticsearch:9200"
+  #     MESH_ELASTICSEARCH_START_EMBEDDED: "false"
+  #     MESH_UPDATECHECK: "false"
+
+  # tomcat:
+  #   image: tomcat:8.5
+  #   command: ["catalina.sh", "jpda", "run"]
+  #    # activiti.war is the output from building the Activiti webapp.
+  #    # See: https://www.gentics.com/Content.Node/guides/activiti_configuration.html
+  #    # If running acitiviti from another docker-compose file, get the IP of the CMS container using
+  #    # docker inspect ACTIVITI_CONTAINER and use the gateway address (=host)
+  #    # Do the same thing for the CMS container to get the host address there and be adle to configure
+  #    # the activiti IP.
+  #   volumes:
+  #     - ./activiti/activiti.war:/usr/local/tomcat/webapps/activiti.war
+  #     - ./activiti/gentics-activiti.properties:/Node/etc/gentics-activiti.properties
 
 volumes:
   cms-node:
@@ -63,4 +97,8 @@ volumes:
   cms-bundles:
     driver: local
   db-data:
+    driver: local
+  mesh-config:
+    driver: local
+  mesh-data:
     driver: local
